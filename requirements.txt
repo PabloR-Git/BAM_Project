@@ -1,7 +1,6 @@
 # Requirements file containing the package names needed for this software to run
 numpy
 pandas
-json
-re
 scipy
+pytest
 flask

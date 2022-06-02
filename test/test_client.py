@@ -15,7 +15,7 @@ class TestClient(unittest.TestCase):
                        'CTCGCCAGGTGGCGGATAACCCTGGCGGTGCCTATAA'}
 
     def test_get_file_name_return_str(self):
-        ner = FileReader('../assets/dummy.fasta')
+        ner = FileReader('../test/dummy.fasta')
         reader = ner.read_file()
         self.assertIsInstance(reader, str)
 

@@ -6,6 +6,7 @@ import re
 import numpy as np
 import pandas as pd
 
+
 class FileReader:
     """
     Class to get a file name, open it and prepare it for further analysis
@@ -15,16 +16,15 @@ class FileReader:
         self.sequence = self.delete_non_seq_text(self.read_file())
 
     def read_file(self):
-        sequence = open(self.path)
-        sequence = sequence.read()
+        file = open(self.path)
+        sequence = file.read()
+        file.close()
         return sequence
 
     def delete_non_seq_text(self, raw_file: str) -> str:
         text = re.findall(r'([ATGC]{10}[ATGC]*)', raw_file)
         sequence = ''.join(text)
         return sequence
-
-    # TODO: correct the regex sequence to find the whole string
 
 
 # Press the green button in the gutter to run the script.
