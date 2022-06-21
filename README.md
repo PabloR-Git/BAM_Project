@@ -10,7 +10,7 @@ with a stop codon.
 |--------------|---------------|---------------|
 | Eukaryotes   | ATG           | TAG, TAA, TGA |
 | Prokaryotes  | ATG, GTG, TTG | TAG, TAA, TGA |
-| Mitochondria | ATG, ATA, ATG | TAG, TAA, TGA |
+| Mitochondria | ATG, ATA      | TAG, TAA, TGA |
 
 
 ORF analysis correctly identifies more than 90 percent of the genes in yeast and bacteria.
