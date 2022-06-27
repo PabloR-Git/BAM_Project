@@ -51,10 +51,9 @@ class TestClient(unittest.TestCase):
 
     def test_orf_identifier(self):
         ner = FileReader('../test/dummy.fasta')
-        orf_list = ner.orf_finder(TestClient.dummies['text_2'], 'eukaryote')
-        self.assertEqual(['ATGTGGACCCCATAG', 'ATGGCGAGACCGTGTATGTAA', 'ATGATGATGATGATGTGA',
-                          'ATGACCCCCATGAGACGCGAGCGAGCGTAA'],
-                         orf_list)
+        orf_list_slow = ner.orf_finder_slow(ner.sequence, 'eukaryote')
+        orf_list = ner.orf_finder(ner.sequence, 'eukaryote')
+        self.assertEqual(orf_list_slow, orf_list)
         # self.assertEqual(['ATGTGGACCCCATAG', 'ATGGCGAGACCGTGTATGTAA', 'ATGATGATGATGATGTGA', 'TTGTGA', 'GTGTTTGCCTAA',
         #                   'ATAGACGACCGACGAAGATGA', 'ATGAGACGCGAGCGAGCGTAA'], orf_list)
 

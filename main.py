@@ -38,7 +38,16 @@ class FileReader:
         sequence = ''.join(text)
         return sequence
 
-    def orf_finder(self, sequence, organism):
+    def orf_finder(self, sequence: str, organism: str) -> list:
+        """
+        Function that use regex to find the posible ORFs in a sequence. The function can take different sequences and
+        organism types as prokaryote, eukaryote and mitochondria that have specific start codons. The function scans the
+        sequence one base at a time until it finds a start codon and the findall method of the regex library takes non-
+        overlapping sequence matches. The matches are stored in a list and retured
+        :sequence type=str Sequence to be analyzed
+        :organism type=str Specific organism that corresponds to the sequence. (It affects the start coddons)
+        :return: type=list  List of ORFs
+        """
         if organism == 'eukaryote':
             orf_list = re.findall(r'((ATG)(([ATGC]{3})*?)(TAG|TAA|TGA))', sequence)
         if organism == 'prokaryote':
@@ -51,7 +60,7 @@ class FileReader:
         return orf_list
 
     def orf_finder_slow(self, sequence: str, organism: str) -> list:
-        # TODO: Change the start codon find strategy from 3 to one !!!!
+
         # https://www.sciencedirect.com/topics/agricultural-and-biological-sciences/start-codon
         c = 0
         tmp_orf = []
@@ -62,22 +71,31 @@ class FileReader:
             if sequence[c + 0] + sequence[c + 1] + sequence[c + 2] in FileReader.start_codon[organism] and append_var == False:
                 append_var = True
                 tmp_orf.append('ATG')
-            elif sequence[c + 0] + sequence[c + 1] + sequence[c + 2] in {'TAG', 'TAA', 'TGA'} and append_var == True:
+                c += 3
+            elif append_var and sequence[c + 0] + sequence[c + 1] + sequence[c + 2] in {'TAG', 'TAA', 'TGA'}:
                 append_var = False
                 tmp_orf.append(sequence[c + 0] + sequence[c + 1] + sequence[c + 2]+',')
-            elif append_var == True:
+                c += 3
+            elif append_var:
                 tmp_orf.append(sequence[c + 0] + sequence[c + 1] + sequence[c + 2])
+                c += 3
             else:
-                pass
+                c += 1
 
-            c += 3
 
             if c+2 >= len(sequence):
                 loop = False
 
         orf_list = ''.join(tmp_orf)
         orf_list = orf_list.split(',')
-        orf_list.remove('')
+        try:
+            orf_list.remove('')
+        except:   # If it doesn't have the empty '' it means that the segment doesn't have a termination codon
+            last_codons = FileReader.orf_finder_slow(self, orf_list[-1][1:], organism)
+            orf_list.remove(orf_list[-1])
+            for i in last_codons:
+                orf_list.append(i)
+            print(last_codons)
 
         return orf_list
 
